@@ -95,7 +95,7 @@ token. For example, it would not correctly recognize digit such as "1,000".
 ## Sentence segmentation
 Sentence segmentation is not a trivial task either. There might be some cases where your simple sentence segmentation wouldn't work properly. First, make sure you understand the following sentence segmentation code used in the lecture:
 
-```
+```py
 import re
 
 def sentence_segment(match_regex, tokens):
