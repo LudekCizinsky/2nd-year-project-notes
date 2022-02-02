@@ -1,10 +1,14 @@
 import re
 
-text = """
+text1 = """
 'Curiouser and curiouser!' cried Alice (she was so much surprised, that for the moment she quite forgot how to speak good English); 'now I'm opening out like the largest telescope that ever was! Good-bye, feet!' (for when she looked down at her feet, they seemed to be almost out of sight, they were getting so far off). 'Oh, my poor little feet, I wonder who will put on your shoes and stockings for you now, dears? I'm sure I shan't be able! I shall be a great deal too far off to trouble myself about you: you must manage the best way you can; —but I must be kind to them,' thought Alice, 'or perhaps they won't walk the way I want to go! Let me see: I'll give them a new pair of boots every Christmas...'
 """
 
 tweet = "@robv New vids coming tomorrow #excited_as_a_child, can't w8!!" 
+
+text2 = """
+Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch is the longest official one-word placename in U.K. Isn't that weird? I mean, someone took the effort to really make this name as complicated as possible, huh?! Of course, U.S.A. also has its own record in the longest name, albeit a bit shorter... This record belongs to the place called Chargoggagoggmanchauggagoggchaubunagungamaugg. There's so many wonderful little details one can find out while browsing http://www.wikipedia.org during their Ph.D. or an M.Sc.
+"""
 
 def tokenizer(token, text):
       
@@ -21,26 +25,66 @@ def tokenizer(token, text):
             if is_relevant:
                 tmp.append(curr + nxt)
                 skip = True
-            elif curr != " ":
+            else:
                 tmp.append(curr)
         else:
             skip = False
     
-    tokens = [tokens[0]] + tmp + [tokens[-1]] 
+    tokens = [tokens[0]] + tmp + [tokens[-1]]  
     
-    for token in tokens: print(token)
+    return tokens
+
+
+def sentence_segment1(match_regex, tokens):
+
+    current = []
+    sentences = [current]
+    for tok in tokens:
+        current.append(tok)
+        if re.match(match_regex, tok):
+            current = []
+            sentences.append(current)
+    if not sentences[-1]:
+        sentences.pop(-1)
+    return sentences
+
+def sentence_segment2(prev, next, tokens):
+    pass
 
 if __name__ == '__main__':
 
+    # ----------------- Token definitions 
     # With 3 dots together
-    token = " |[\.]{3}|[\w]+-[\w]+|[\w]+|[\.?!,();:—']"
+    token1 = " |[\.]{3}|[\w]+-[\w]+|[\w]+|[\.?!,();:—']"
     
     # Dots separetely
     token2 = " |[\w]+-[\w]+|[\w]+|[\.?!,();:—']" 
 
     # Twitter token definition
-    token_twitter = " |#[\w]+|@[\w]+|[\w]+-[\w]+|[\w]+|[\.?!,();:—']"
+    token3 = " |[\.]{3}|[\w]+|@[\w]+|[\w]+-[\w]+|[\w]+|[\.?!,();:—']"
+    
+    # ----------------- Segmentors definitions
+    segment1 = "\."
+    segment2 = "[\.?!] [A-Z]"
 
-    # Run tokenizer 
-    tokenizer(token_twitter, text)
+    # ----------------- Run tokenizer
+    print("----------- Token definition with dots together")
+    for token in tokenizer(token1, text1): print(token)
+    print("---------- Token definition without dots together")
+    for token in tokenizer(token2, text1): print(token)
+    print("---------- Token definition for twitter")
+    for token in tokenizer(token3, tweet): print(token)
+    
+    # ----------------- Run segmenter
+    print("---------- Default segmenter")
+    for sentence in sentence_segment(segment1, tokenizer(token3, text2)): print(sentence)
+    print("---------- Improved segmenter")
+    for sentence in sentence_segment(segment2, tokenizer(token3, text2)): print(sentence)
+
+
+
+
+
+
+
 

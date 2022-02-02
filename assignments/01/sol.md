@@ -128,4 +128,21 @@ def sentence_segment(match_regex, tokens):
     return sentences
 ```
 
+In the following code, there is a variable `text` containing a small text and A regular expression-based segmenter:
+```py
+text = """
+Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch is the longest official one-word placename in U.K. Isn't that weird? I mean, someone took the effort to really make this name as complicated as possible, huh?! Of course, U.S.A. also has its own record in the longest name, albeit a bit shorter... This record belongs to the place called Chargoggagoggmanchauggagoggchaubunagungamaugg. There's so many wonderful little details one can find out while browsing http://www.wikipedia.org during their Ph.D. or an M.Sc.
+"""
+token = re.compile('Mr.|[\w\']+|[.?]+')
 
+tokens = token.findall(text)
+sentences = sentence_segment(re.compile('\.'), tokens)
+for sentence in sentences:
+    print(sentence)
+```
+
+### Task 1
+Improve the segmenter so that it segments the text in the way you think it is correct.
+
+**Solution**
+See the scripts file.
