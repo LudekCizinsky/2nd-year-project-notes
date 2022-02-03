@@ -168,4 +168,59 @@ Can you think of other problematic cases not covered in the example?
 Yes, for example if we would be dealing with a scientific text where there are
 mathematical symbols present.
 
+# Lecture 2
+## Linux Command Line for NLP: Conll Format
+
+### Task 1
+Search in the `da_arto.conll` file (in the assingment1 directory) for first names. You can assume that first names always have the label B-PER, and that the string "B-PER" does not occur in the first column.
+
+**Solution**
+We can use the following command:
+```
+grep -n 'B-PER' da_arto.conll
+```
+
+### Task 2
+How many names occur in the data?
+
+**Solution**
+We can use the following command:
+```
+grep -c 'B-PER' da_arto.conll
+```
+
+And we get `96`. If we only want unique names, we can can use:
+```
+grep 'B-PER' da_arto.conll | sort | uniq | wc -l
+```
+and we get `87`.
+
+### Task 3
+How can we make sure that we do not match the string "B-PER" occuring in the first column?
+
+**Solution**
+We can use `awk` command to select second column and then match the given
+pattern in that column:
+```
+awk -F\t '$2=="B-PER"' da_arto.conll
+```
+
+### Task 4
+How can we clean away the labels, so that we have only a list of names left? (hint: pipe the result of the previous command into a split)
+
+**Solution**
+We can again use `awk` for that:
+```
+awk -F\t '$2=="B-PER"' da_arto.conll | awk '{print $1}'
+```
+
+### Task 5
+How many of the names you found start with an uppercased character?
+
+**Solution**
+
+There is in total 49 unique names starting with uppercase letter:
+```
+awk -F\t '$2=="B-PER"' da_arto.conll | awk '{print $1}' | grep -E "^[A-Z]" | sort | uniq | wc -l
+```
 
