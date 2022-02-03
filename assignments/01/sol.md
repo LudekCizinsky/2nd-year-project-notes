@@ -1,3 +1,10 @@
+# Lecture 1
+To see the scripts results simply run:
+
+```
+python scripts 1
+```
+
 ##  Regular expressions
 
 ### Task 1
@@ -120,6 +127,7 @@ def sentence_segment(match_regex, tokens):
     sentences = [current]
     for tok in tokens:
         current.append(tok)
+        w would you deal with all URLs effectively?
         if match_regex.match(tok):
             current = []
             sentences.append(current)
@@ -146,3 +154,18 @@ Improve the segmenter so that it segments the text in the way you think it is co
 
 **Solution**
 See the scripts file.
+
+### Task 2
+How would you deal with all urls effectivelly?
+
+**Solution**
+I would just used some solution that I would find on the Internet, such as this [one](https://mathiasbynens.be/demo/url-regex).
+
+### Task 3
+Can you think of other problematic cases not covered in the example?
+
+**Solution**
+Yes, for example if we would be dealing with a scientific text where there are
+mathematical symbols present.
+
+

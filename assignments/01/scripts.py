@@ -1,4 +1,5 @@
 import re
+import sys
 
 text1 = """
 'Curiouser and curiouser!' cried Alice (she was so much surprised, that for the moment she quite forgot how to speak good English); 'now I'm opening out like the largest telescope that ever was! Good-bye, feet!' (for when she looked down at her feet, they seemed to be almost out of sight, they were getting so far off). 'Oh, my poor little feet, I wonder who will put on your shoes and stockings for you now, dears? I'm sure I shan't be able! I shall be a great deal too far off to trouble myself about you: you must manage the best way you can; —but I must be kind to them,' thought Alice, 'or perhaps they won't walk the way I want to go! Let me see: I'll give them a new pair of boots every Christmas...'
@@ -48,10 +49,24 @@ def sentence_segment1(match_regex, tokens):
         sentences.pop(-1)
     return sentences
 
-def sentence_segment2(prev, next, tokens):
-    pass
+def sentence_segment2(prev, nxt, tokens):
+    sent = [tokens[0]]
+    result = []
+    for i in range(1, len(tokens)-1):
+       p, curr, n = tokens[i-1], tokens[i], tokens[i+1] 
+       if re.match(prev, p) and curr == " " and re.match(nxt, n):
+         sent.append(curr)
+         result.append(sent)
+         sent = []
+       else:
+         sent.append(curr)
+    
+    if len(sent) > 0:
+      result.append(sent)
+    
+    return result
 
-if __name__ == '__main__':
+def lecture1():
 
     # ----------------- Token definitions 
     # With 3 dots together
@@ -62,7 +77,7 @@ if __name__ == '__main__':
 
     # Twitter token definition
     token3 = " |[\.]{3}|[\w]+|@[\w]+|[\w]+-[\w]+|[\w]+|[\.?!,();:—']"
-    
+
     # ----------------- Segmentors definitions
     segment1 = "\."
     segment2 = "[\.?!] [A-Z]"
@@ -74,17 +89,20 @@ if __name__ == '__main__':
     for token in tokenizer(token2, text1): print(token)
     print("---------- Token definition for twitter")
     for token in tokenizer(token3, tweet): print(token)
-    
+
     # ----------------- Run segmenter
     print("---------- Default segmenter")
-    for sentence in sentence_segment(segment1, tokenizer(token3, text2)): print(sentence)
+    for sentence in sentence_segment1(segment1, tokenizer(token3, text2)): print(sentence)
+    print()
     print("---------- Improved segmenter")
-    for sentence in sentence_segment(segment2, tokenizer(token3, text2)): print(sentence)
+    prev = segment2.split(" ")[0]
+    nxt = segment2.split(" ")[1] 
+    for sentence in sentence_segment2(prev,nxt,tokenizer(token3, text2)): print(sentence)
 
 
+if __name__ == '__main__':
 
-
-
-
-
+  which = int(sys.argv[1])
+  if which == 1:
+    lecture1()
 
