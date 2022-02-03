@@ -1,10 +1,4 @@
 # Lecture 1
-To see the scripts results simply run:
-
-```
-python scripts 1
-```
-
 ##  Regular expressions
 
 ### Task 1
@@ -218,9 +212,44 @@ awk -F\t '$2=="B-PER"' da_arto.conll | awk '{print $1}'
 How many of the names you found start with an uppercased character?
 
 **Solution**
-
-There is in total 49 unique names starting with uppercase letter:
+There is in total `49` unique names starting with uppercase letter:
 ```
 awk -F\t '$2=="B-PER"' da_arto.conll | awk '{print $1}' | grep -E "^[A-Z]" | sort | uniq | wc -l
+```
+
+and without the unique constraint we get `53` such names:
+```
+awk -F\t '$2=="B-PER"' da_arto.conll | awk '{print $1}' | grep -E "^[A-Z]" -c 
+```
+
+## More Advanced Usage of Unix Tools: Creating a word frequency list, finding function words
+
+Let us now create a simple word frequency list from the book above using Unix tools to answer the following question: Which four (function) words are the most frequent in The Adventures of Sherlock Holmes by Arthur Conan Doyle?
+
+The first step is to split the text into separate words. Here, we will use the command sed to replace all spaces with a newline:
+
+```
+sed 's/ /\n/g' FILE
+```
+
+Note: Remember the flag g, which stands for global. It replaces all occurrences of a space on a line.
+
+```
+sed 's/ /\n/g' FILE | less
+```
+
+Now we can sort the list of tokens and count unique words:
+
+```
+sed 's/ /\n/g' FILE | sort | uniq -c
+```
+
+To create the most frequent words first, sort again in reverse numeric order (find the options of sort to do so, e.g. check man sort).
+
+**Solution**
+
+The most common words are `the| |and|of`:
+```
+sed 's/ /\n/g' pg1661.txt | sort | uniq -c | sort -r | head -4
 ```
 
