@@ -198,6 +198,11 @@ pattern in that column:
 ```
 awk -F\t '$2=="B-PER"' da_arto.conll
 ```
+Alternatively, we can use `cut` command as follows:
+
+```
+cat da_arto.conll | cut -f2 |  grep -c 'B-PER' 
+```
 
 ### Task 4
 How can we clean away the labels, so that we have only a list of names left? (hint: pipe the result of the previous command into a split)
