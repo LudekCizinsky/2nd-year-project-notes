@@ -69,7 +69,7 @@ def generate_random_ann(p, D):
 def annotation_quality():
 
   d1 = "luci.pos.ann.conll" # input("Specify path relative to your current location to the first dataset: ")
-  d2 = "test.pos.ann.conll" # input("Specify path relative to your current location to the second dataset: ")
+  d2 = "other.pos.ann.conll" # input("Specify path relative to your current location to the second dataset: ")
 
   ann1 = load_ann(d1)
   ann2 = generate_random_ann(.8, ann1)  # load_ann(d2)
