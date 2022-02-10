@@ -29,5 +29,6 @@ See the implementations in `scripts.py`. TODO: b and c.
 In this exercise, turn the given data into unigram features.
 
 **Solution**
-See the implementation in `scripts.py`.
+See the implementation in `scripts.py`. I am also using my own lib which can be
+found [here](https://github.com/LudekCizinsky/nano-learn).
 
