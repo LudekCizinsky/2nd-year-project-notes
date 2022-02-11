@@ -14,10 +14,23 @@ done
 
 # lecture 3
 while true; do
-  read -p "------ Do you want to review lecture 3 exercise? [y/n] " ans
+  read -p "---- Do you want to review lecture 3 exercise? [y/n] " ans
   if [[ $ans  =~ "y" ]]
   then
      ./scripts.py "l3"
+     break
+  elif [[ $ans  =~ "n" ]]
+  then
+    break
+  fi
+done
+
+# lecture 4
+while true; do
+  read -p "---- Do you want to review lecture 4 exercise? [y/n] " ans
+  if [[ $ans  =~ "y" ]]
+  then
+     ./scripts.py "l4"
      break
   elif [[ $ans  =~ "n" ]]
   then

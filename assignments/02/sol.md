@@ -37,3 +37,28 @@ found [here](https://github.com/LudekCizinsky/nano-learn).
 ## 4. Naive Bayes Classifier (pen and paper)
 See the solution [here](https://deepnote.com/project/SYP--pD6EPwxQJqHOzuVtsapEA/%2Fnotebook.ipynb).
 
+## 5. Naive Bayes with BOW in sklearn and 6. Discriminative Classifier with BOW
+The task was to train NB and LR on one dataset and then evaluate on two dev
+sets. The method of feature extraction was bow.
+
+**Solution**
+For both models I got similar results. On wookipedia dataset LR performed slightly worse than NB and for bulba dataset, it was vice versa. In addition, it is important to emphasize, than I used count of words andnot just simply binary features. In addition, there was a slight performance drop for bulba dataset, which is reasonable as the models were trained on wookipedia datasets. 
+
+## 7. Character n-grams
+
+As the name suggests, here the goal was to implement character ngrams and see if
+there will be any diffence in models' performance.
+
+**Solution**
+I have not seen any signifficant changes in terms of model performance. Again,
+for implementation see the `scripts.py`.
+
+## Analysis
+
+Analyze the models using confusion matrix and weights for each features.
+
+**Solution**
+From confusion matrix, we can see that the model has the biggest problem with
+misclassyfying en and nl with da. Interestingly, each model has different top
+5 words.
+
