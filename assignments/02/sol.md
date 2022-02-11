@@ -41,11 +41,11 @@ a) Exercise 4.1 from J&M
 From the information given, we know that to estimate posterior probabilities for
 each class we can write:
 
-<img src="https://latex.codecogs.com/png.image?\dpi{300}&space;P(y&space;=&space;pos&space;|&space;x)&space;~&space;0.09*0.07*0.29*0.04*0.08&space;=&space;.0000058&space;//P(y&space;=&space;neg&space;|&space;x)&space;~&space;0.16*0.06*0.06*0.15*0.11&space;=&space;.000009" title="P(y = pos | x) ~ 0.09*0.07*0.29*0.04*0.08 = .0000058 //P(y = neg | x) ~ 0.16*0.06*0.06*0.15*0.11 = .000009" />
+<img src="https://render.githubusercontent.com/render/math?math={\color{white}P(y = pos | x) ~ 0.09*0.07*0.29*0.04*0.08 = .0000058 // P(y = neg | x) ~ 0.16*0.06*0.06*0.15*0.11 = .000009
+">
 
 $$
-P(y = pos | x) ~ 0.09*0.07*0.29*0.04*0.08 = .0000058 //
-P(y = neg | x) ~ 0.16*0.06*0.06*0.15*0.11 = .000009
+P(y = pos | x) ~ 0.09*0.07*0.29*0.04*0.08 = .0000058 // P(y = neg | x) ~ 0.16*0.06*0.06*0.15*0.11 = .000009
 $$
 
 For this reason we can conclude that our naive bayes classifier would predict
