@@ -24,3 +24,17 @@ while true; do
     break
   fi
 done
+
+# lecture 6
+while true; do
+  read -p "---- Do you want to review lecture 6 exercise? [y/n] " ans
+  if [[ $ans  =~ "y" ]]
+  then
+     ./scripts.py "l6"
+     break
+  elif [[ $ans  =~ "n" ]]
+  then
+    break
+  fi
+done
+

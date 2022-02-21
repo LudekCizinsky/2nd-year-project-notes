@@ -5,8 +5,20 @@ import sys
 from collections import defaultdict
 import numpy as np
 import codecs
+import torch
+from model import LangId
 
 # -------- General code
+def load_langid(path):
+    text = []
+    labels = []
+    for line in open(path, encoding="utf-8"):
+        tok = line.strip().split('\t')
+        labels.append(tok[0])
+        text.append(tok[1])
+    return text, labels
+
+
 def read_conll_file(file_name): 
   """
   Code from: Rob van der Goot
@@ -337,6 +349,158 @@ def run_tagger_on_test(tg):
   print(f"> See the predicted labels in the file called y.out")
 
 
+# -------- Lecture 6 detailed code
+
+def get_V(txt):
+
+  V = set()
+  for s in txt:
+    V.update(set(s))
+  V = sorted(list(V))
+  return np.array(V)
+
+def add_binary(X, V, txt):
+  
+  for i, s in enumerate(txt):
+    s = set(s)
+    ms = torch.tensor([v in s for v in V], dtype=torch.bool)
+    X[i, ms] = 1
+
+  return X
+
+
+def prepare_input(filename, V=None, unlb=None):
+
+  print("Loading data...")
+  txt, lbls  = load_langid(filename)
+  print("> Done!\n")
+
+  print("Transforming text to binary matrix...")
+  if V is None:
+    V = get_V(txt)
+  n, m = len(txt), len(V)
+  X = torch.zeros(n, m, dtype=torch.float32)
+  X = add_binary(X, V, txt)
+  print(f"> Successfully obtained {n} x {m} matrix.\n")
+
+  print("Encoding labels...")
+  if unlb is None:
+    unlb = sorted(list(set(lbls)))
+  K = len(unlb)
+  if K <= 1:
+    raise ValueError("In the given dataset, there is only one label. Minimum is 2.")
+  elif K == 2:
+    M = {lb: i for i, lb in enumerate(unlb)}
+    y = torch.FloatTensor([M[lb] for lb in lbls])
+    print(f"> Successfully encoded labels as one dimensional array since there are 2 unique labels in total.\n")
+  else:
+    M = {lb: i for i, lb in enumerate(unlb)}
+    y = torch.zeros(n, K, dtype=float)
+    for i, lb in enumerate(lbls):
+      y[i, M[lb]] = 1
+    print(f"> Successfully one hot encoded labels as {n} x {K} matrix since there {K} unique labels. \n")
+
+  print(f"> Size of the vocabulary: {len(V)}\n")
+
+  return V, X, y
+
+def custom_forward_random(X, K):
+  """forward pass through pre-determined NN.
+  """
+  
+  print("Started initialization of the weights...")
+  n, m0 = X.shape
+  
+  m1 = 15
+  W1 = torch.randn(m0, m1)
+  b1 = torch.ones((n, m1), dtype=torch.float32)
+
+  m2 = 20
+  W2 = torch.randn(m1, m2)
+  b2 = torch.ones((n, m2), dtype=torch.float32)
+
+  m3 = K
+  W3 = torch.randn(m2, m3)
+  b3 = torch.ones((n, m3), dtype=torch.float32)
+  print(f"> Structure of the network:\n>> Input neurons: {m0}\n>> Hidden layer 1 neurons: {m1}\n>> Hidden layer 2 neuron {m2}\n>> Output layer neurons: {m3}\n")
+  
+  print("Forward pass running...")
+  z1 = torch.tanh(torch.mm(X, W1) + b1)
+  z2 = torch.tanh(torch.mm(z1, W2) + b2)
+  z3 = torch.mm(z2, W3) + b3
+  print("> Forward pass done. Here is a sum along rows:")
+  print(">> " + str(torch.sum(z3, 1)))
+  print()
+
+  return z3
+
+def custom_forward_given(X, K, w):
+  """forward pass through pre-determined NN.
+  """
+  
+  print("Started initialization of the weights...")
+  n, m0 = X.shape
+  
+  m1 = 15
+  W1 = w['input.weight'].t()
+  b1 = w['input.bias'].t()
+
+  m2 = 20
+  W2 = w['hidden1.weight'].t()
+  b2 = w['hidden1.bias'].t()
+
+  m3 = K
+  W3 = w['hidden2.weight'].t()
+  b3 = w['hidden2.bias'].t()
+  print(f"> Structure of the network:\n>> Input neurons: {m0}\n>> Hidden layer 1 neurons: {m1}\n>> Hidden layer 2 neuron {m2}\n>> Output layer neurons: {m3}\n")
+  
+  print("Forward pass running...")
+  z1 = torch.tanh(torch.mm(X, W1) + b1)
+  z2 = torch.tanh(torch.mm(z1, W2) + b2)
+  z3 = torch.mm(z2, W3) + b3
+  print("> Forward pass done.\n")
+
+  return z3
+
+
+
+def check_weights(V):
+  
+  print("Loading the external model...")
+  md = torch.load('model.th')
+  print("> Model loaded successfully. Here is a vector with input bias:")
+  print(">> " + str(md.state_dict()['input.bias']) + "\n")
+  print(">> Here are the available keys: " + str(list(md.state_dict().keys())))
+  print()
+  
+  _, X_dev, y_dev = prepare_input('langid-data/wookipedia_langid.dev.tok.txt', V, unlb=['da', 'nl', 'en'])
+  
+  print("Running forward pass using the loaded model...")
+  y_hat1 = md.forward(X_dev)
+  print(y_hat1)
+  print("> Forward pass successful.\n")
+  
+  print("Running the forward pass using my implementation with the given weights...")
+  y_hat2 = custom_forward_given(X_dev, K=3, w=md.state_dict())
+  print(y_hat2)
+  print("> Forward pass successful.\n")
+  
+  print("Are the outputs the same...")
+  res = torch.equal(y_hat1, y_hat2)
+  if not res:
+    print("> They are not!\n")
+  else:
+    print("> Yes, they are!\n")
+    y_hat = y_hat1
+
+  print("Making the predictions...")
+  sm = torch.nn.Softmax(1)
+  pred = torch.argmax(sm(y_hat), dim=1) 
+  idx2label = ['da', 'nl', 'en']
+  pred_names = [idx2label[i] for i in pred] 
+  print("> Here is a few first predictions: " + str(pred_names[:3]))
+
+
 # -------- High level code to run the given tasks in each lecture
 def lecture5():
 
@@ -360,8 +524,21 @@ def lecture5():
 
 
 def lecture6():
-  pass
 
+  ans = get_yes_no("-- Do you want to transform training data? ")
+  if ans == "y":
+    V, X_train, y_train = prepare_input('langid-data/wookipedia_langid.train.tok.txt', unlb=['da', 'nl', 'en'])  
+  else:
+    return
+
+  ans = get_yes_no("-- Do you want to see the result of custom forward pass? ")
+  if ans == "y":
+    custom_forward_random(X_train, K=3) 
+
+  ans = get_yes_no("-- Do you want to inspect the weights? ")
+  if ans == "y":
+    check_weights(V) 
+ 
 
 if __name__ == "__main__":
   
@@ -369,6 +546,8 @@ if __name__ == "__main__":
 
   if which == 'l5':
     lecture5()
-  else:
+  elif which == 'l6':
     lecture6()
+  else:
+    raise ValueError("Undefined lecture!")
 
