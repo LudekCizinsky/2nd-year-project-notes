@@ -36,8 +36,7 @@ examples, run the command line.
 ## 2. Analogies
 In this exercise, the task was to test how well we can extract different
 analogies using the given word embeddings. In this case, `google news` seemed to
-perform better as for example when finding the analogy for: `Denmark
-- Copenhagen x England - ?` I got the following results:
+perform better as for example when finding the analogy for: `Denmark : Copenhagen x England - ?` I got the following results:
 
 ```
 >>> Twitter [('Dublin', 0.791156530380249), ('London', 0.7881399989128113), ('Glasgow', 0.779718816280365), ('Edinburgh', 0.7671084403991699), ('Antwerp', 0.75947505235672), ('Aberystwyth', 0.7533636689186096), ('Birmingham', 0.7525423169136047), ('Melbourne', 0.7460692524909973), ('Leeds', 0.7449815273284912), ('Brighton', 0.7437199950218201)]
@@ -54,7 +53,8 @@ biggest challenge of course was first correctly tokenize the raw text. Next, it
 was also important to decided on the architecture of the neural network. We only
 had just one hidden layer which is actually not that much. Finally, it was also
 important to consider which optimizer to use as well as the batch size as all of
-these parameters can influence the overall performance.
+these parameters can influence the overall performance. Again, use the command
+line, or check the `scripts.py` to see the details of the training.
 
 # Lecture 8
 For this assignment, we are going to take a closer look at the ``Convolutional Neural Networks for Sentence Classification'' paper from Yoon Kim, which can be found [here](https://aclanthology.org/D14-1181/). 
@@ -73,5 +73,16 @@ e) The channels of a CNN are different ways of representing the input (e.g. for 
 
 ---
 
-a)
+a) `Max over time pooling` which is just taking the maximum from the input vector `v` representing the feature map.
+
+b) In total, `4 kernels` are applied since there are 4 resulting feature maps. In other words, each filter produces one feature map. 
+
+c) Each filter is of `h \times k` dimensions where `h` is a size of the
+window and `k` is the dimension of the input embeddings. For example,
+Mikolov's word2vec has 300 dimensions. 
+
+d) See the answer in c).
+
+e) He adds another channels which are then trainable as opposed to the single
+channel with pretrained word embeddings. 
 
