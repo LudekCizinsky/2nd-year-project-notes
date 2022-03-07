@@ -66,6 +66,8 @@ class RnnPosTagger:
     self.rawdev = None
     self.X_train = None
     self.y_train = None
+    self.MX = None
+    self.MY = None
     self.X_dev = None
     self.y_dev = None
 
@@ -86,7 +88,7 @@ class RnnPosTagger:
     print(colored('[Loading and transforming dev data]', LOGCL, attrs=['bold']))
     self.rawdev = self._load_data(filename)
     mx = max([len(x[0]) for x in self.rawdev])
-    self.X_dev, self.y_dev, MX, MY = self._raw2idx(self.rawdev, mx)
+    self.X_dev, self.y_dev, _, _ = self._raw2idx(self.rawdev, mx, self.MX, self.MY)
     print(f"> Resulting dimension of loaded data: {len(self.rawdev)} x {mx}\n")
 
 
@@ -108,14 +110,14 @@ class RnnPosTagger:
     print(colored('[Loading and transforming training data]', LOGCL, attrs=['bold']))
     self.rawtrain = self._load_data(filename)
     mx = max([len(x[0]) for x in self.rawtrain])
-    self.X_train, self.y_train, MX, MY = self._raw2idx(self.rawtrain, mx)
+    self.X_train, self.y_train, self.MX, self.MY = self._raw2idx(self.rawtrain, mx)
     print(f"> Resulting dimension of loaded data: {len(self.rawtrain)} x {mx}\n")
 
     print(colored('[Preparing model]', LOGCL, attrs=['bold']))
     torch.manual_seed(0)
     self.model = TaggerModel(
-        nwords=len(MX),
-        ntags=len(MY),
+        nwords=len(self.MX),
+        ntags=len(self.MY),
         emb_dim=100,
         hidden_dim=50 
     )
@@ -124,7 +126,7 @@ class RnnPosTagger:
     print(colored('[Learning optimal parameters]', LOGCL, attrs=['bold']))
     traindata = MyDataset(self.X_train, self.y_train)
     optimizer = torch.optim.Adam(self.model.parameters(), lr=self.lr)
-    criterion = torch.nn.CrossEntropyLoss(ignore_index=0, reduction='sum')
+    criterion = torch.nn.CrossEntropyLoss(ignore_index=0, reduction='mean')
 
     for epoch in range(self.epochs):
 
@@ -197,39 +199,53 @@ class RnnPosTagger:
     return data
 
 
-  def _raw2idx(self, raw, mx):
-
-    MX = defaultdict()
-    MX.default_factory = MX.__len__
-
-    MY = defaultdict()
-    MY.default_factory = MY.__len__
+  def _raw2idx(self, raw, mx, MX=None, MY=None):
     
+    if MX is None:
+      MX = defaultdict()
+      MX.default_factory = MX.__len__
+
+      MY = defaultdict()
+      MY.default_factory = MY.__len__
+
     resx = []
     resy = []
     for x, y in raw:
 
-      t = (mx - len(x))
+        t = (mx - len(x))
 
-      tmpx = [MX["PAD"]]*t 
-      for w in x:
-        tmpx.append(MX[w])
-      resx.append(tmpx) 
+        tmpx = [] 
+        for w in x:
+            try:
+              tmpx.append(MX[w])
+            except KeyError:
+              tmpx.append(MX["PAD"])
+        tmpx = tmpx + [MX["PAD"]]*t
+        resx.append(tmpx)
 
-      tmpy = [MY["PAD"]]*t
-      for l in y:
-        tmpy.append(MY[l])
-      resy.append(tmpy)
+        tmpy = []
+        for l in y:
+          try:
+            tmpy.append(MY[l])
+          except KeyError:
+            tmpy.append(MY["PAD"])
+        tmpy = tmpy + [MY["PAD"]]*t
+        resy.append(tmpy)
+    
+    MX.default_factory = None
+    MY.default_factory = None
 
     return torch.LongTensor(resx), torch.LongTensor(resy), MX, MY
-
 
 # -------- High level code to run the given tasks in each lecture
 def lecture9():
 
+  print(colored('[Start of exercise 9]\n', "red" , attrs=['bold']))
   tg = RnnPosTagger()
   tg.fit('pos-data/da_ddt-ud-train.conllu')
   tg.dev_eval('pos-data/da_arto-dev.conll')
+  print()
+  print(colored('[End of exercise 9]', "red" , attrs=['bold']))
 
 def lecture10():
   pass
