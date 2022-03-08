@@ -1,0 +1,54 @@
+[1m[32m------------- Loading libraries[0m
+> Done!
+
+[1m[31m------------- Start of the review of ex. 9: 2022-03-08 10:21:32
+[0m
+[1m[35m[Training started][0m
+[1m[34m[Loading and transforming training data][0m
+> Resulting dimension of loaded data: 4383 x 91
+
+[1m[34m[Preparing model][0m
+> Done!
+
+[1m[34m[Learning optimal parameters][0m
+>> Epoch 1
+[1,    50] loss: 2.155
+[1,   100] loss: 2.065
+>> Epoch 2
+[2,    50] loss: 2.036
+[2,   100] loss: 2.033
+>> Epoch 3
+[3,    50] loss: 2.026
+[3,   100] loss: 2.025
+>> Epoch 4
+[4,    50] loss: 2.024
+[4,   100] loss: 2.024
+>> Epoch 5
+[5,    50] loss: 2.023
+[5,   100] loss: 2.019
+>> Epoch 6
+[6,    50] loss: 2.013
+[6,   100] loss: 2.011
+>> Epoch 7
+[7,    50] loss: 2.008
+[7,   100] loss: 2.008
+>> Epoch 8
+[8,    50] loss: 2.004
+[8,   100] loss: 2.003
+>> Epoch 9
+[9,    50] loss: 2.000
+[9,   100] loss: 1.998
+>> Epoch 10
+[10,    50] loss: 1.998
+[10,   100] loss: 1.997
+> Training Accuracy: 0.9611536264419556
+> Done!
+
+[1m[35m[Evaluation on dev set started][0m
+[1m[34m[Loading and transforming dev data][0m
+> Resulting dimension of loaded data: 20 x 37
+
+[1m[34m[Making predictions][0m
+> Dev Accuracy: 0.7716216444969177
+
+[1m[31m------------- End of exercise 9[0m

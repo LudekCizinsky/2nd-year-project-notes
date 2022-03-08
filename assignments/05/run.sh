@@ -21,8 +21,25 @@ while true; do
   read -p "---- Do you want to review lecture 9 exercise? [y/n] " ans
   if [[ $ans  =~ "y" ]]
   then
-     ./scripts.py "l9"
+      echo "-- Loading data, training and evaluating model..."
+     ./scripts.py "l9" > lec9.log
+     echo "-- See the result in lec9.log:\n>>> cat log lec9.log"
      break
+  elif [[ $ans  =~ "n" ]]
+  then
+    break
+  fi
+done
+
+# lecture 10
+while true; do
+  read -p "---- Do you want to review lecture 10 exercise? [y/n] " ans
+  if [[ $ans  =~ "y" ]]
+  then
+      echo "-- Loading data, training and evaluating model..."
+     ./scripts.py "l10" > lec10.log
+      echo "-- See the result in lec10.log:\n>>> cat log lec10.log"
+      break
   elif [[ $ans  =~ "n" ]]
   then
     break
