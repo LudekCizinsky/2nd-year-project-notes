@@ -6,8 +6,8 @@ print(colored('------------- Loading libraries', 'green', attrs=['bold']))
 import codecs
 import sys
 import datetime
-from libs.lec11 import *
-from libs.lec12 import *
+from libs.lec11 import lec11
+from libs.lec12 import lec12
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -45,7 +45,7 @@ def lecture12():
   tm = now.strftime("%Y-%m-%d %H:%M:%S")
 
   print(colored(f'------------- Start of the review of ex. 12: {tm}\n', "red" , attrs=['bold']))
-
+  lec12()
   print(colored('------------- End of exercise 12', "red" , attrs=['bold']))
 
 if __name__ == "__main__":
@@ -57,6 +57,6 @@ if __name__ == "__main__":
   elif which == 'l12':
     lecture12()
   else:
-    lecture11()
+    lecture12()
     # raise ValueError("Undefined lecture!")
 

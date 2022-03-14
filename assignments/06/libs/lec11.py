@@ -1,14 +1,7 @@
-import logging
 import elmoformanylangs
 from scipy.spatial.distance import cosine
 import pickle
 from termcolor import colored
-
-logging.getLogger('allennlp.common.params').disabled = True
-logging.getLogger('allennlp.nn.initializers').disabled = True
-logging.getLogger('allennlp.modules.token_embedders.embedding').setLevel(logging.WARNING)
-logging.getLogger('urllib3.connectionpool').disabled = True
-
 LOGCL = "blue"
 
 def lec11(): 
