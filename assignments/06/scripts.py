@@ -23,11 +23,11 @@ def get_yes_no(text):
     if ans in ["y", "n"]:
       return ans
 
-# -------- Detailed code for lecture 9
-# See libs/lec9.py
+# -------- Detailed code for lecture 11
+# See libs/lec11.py
 
-# -------- Detailed code for lecture 10
-# See libs/lec10.py
+# -------- Detailed code for lecture 12
+# See libs/lec12.py
 
 # -------- High level code to run the given tasks in each lecture
 def lecture11():
@@ -56,7 +56,6 @@ if __name__ == "__main__":
     lecture11()
   elif which == 'l12':
     lecture12()
-  else:
-    lecture12()
-    # raise ValueError("Undefined lecture!")
+  else: 
+    raise ValueError("Undefined lecture!")
 

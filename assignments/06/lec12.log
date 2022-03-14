@@ -1,0 +1,38 @@
+[1m[32m------------- Loading libraries[0m
+> Done!
+
+[1m[31m------------- Start of the review of ex. 12: 2022-03-14 19:58:56
+[0m
+[1m[35m[Exercise 3: Subword tokenization][0m
+[1m[34m[Loading pre-trained tokenizer][0m
+> Done!
+
+[1m[34m[Testing tokenizer][0m
+> ['My', 'name', 'is', 'Lu', '##dek', 'Ci', '##zin', '##sky', 'and', 'I', 'am', 'from', 'Czech', 'republic', '.']
+> ['Mo', '##je', 'jméno', 'je', 'Lu', '##dě', '##k', 'Č', '##i', '##ži', '##nský', 'a', 'jsem', 'z', 'České', 'republiky', '.']
+> Done!
+
+[1m[34m[Loading another tokenizer][0m
+> Done!
+
+[1m[34m[Testing analogies][0m
+> Copenhagen is capital of Denmark and London is capital of [MASK].
+>> ['England', 'Britain', 'London', 'Europe', 'UK']
+
+> He is a boy and she is a [MASK].
+>> ['girl', 'boy', 'woman', 'man', 'child']
+
+> He is nice, but the other guy is even [MASK].
+>> ['worse', 'better', 'hotter', 'harder', 'younger']
+
+> Dane is from Denmark and Czech is from [MASK].
+>> ['Slovakia', 'Austria', 'Czechoslovakia', 'Germany', 'Poland']
+
+[1m[34m[Examining gender biases][0m
+> A truck driver stopped to take a break and to eat [MASK] lunch.
+>> ['his', 'some', 'their', 'for', 'my']
+
+> He wore a blue color whereas she wore [MASK]
+>> ['.', 'red', ';', 'green', 'white']
+
+[1m[31m------------- End of exercise 12[0m

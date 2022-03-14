@@ -131,7 +131,7 @@ dataset. To train the model, we can run the following from the folder of this
 exercise:
 
 ```bash
-python libs/bert/bert-topic.py libs/bert/topic-data/train.txt libs/bert/topic-data/dev.txt
+python3 libs/bert/bert-topic.py libs/bert/topic-data/train.txt libs/bert/topic-data/dev.txt
 ```
 
 To run the training on `HPC`, we first need to move the data to the cluster. We

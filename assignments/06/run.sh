@@ -22,7 +22,7 @@ while true; do
   if [[ $ans  =~ "y" ]]
   then
       echo "-- Loading data, training and evaluating model..."
-     ./scripts.py "l9" > lec11.log
+     ./scripts.py "l11" > lec11.log
      echo "-- See the result in lec11.log:\n>>> cat log lec11.log"
      break
   elif [[ $ans  =~ "n" ]]
