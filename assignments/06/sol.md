@@ -130,14 +130,14 @@ dimension being equal to the `number of classes` present within the training
 dataset. To train the model, we can run the following from the folder of this
 exercise:
 
-```
+```bash
 python libs/bert/bert-topic.py libs/bert/topic-data/train.txt libs/bert/topic-data/dev.txt
 ```
 
 To run the training on `HPC`, we first need to move the data to the cluster. We
 first `ssh` to the cluster and:
 
-```
+```bash
 ssh luci@hpc.itu.dk
 mkdir bert
 mkdir bert/topic-data
@@ -146,7 +146,7 @@ mkdir bert/log
 
 We then `cd` locally into the `libs` folder and run:
 
-```
+```bash
 scp bert/bert-topic.py luci@hpc.itu.dk:/home/luci/bert/main.py
 scp bert/myutils.py luci@hpc.itu.dk:/home/luci/bert/myutils.py
 scp bert/topic-data/train.txt luci@hpc.itu.dk:/home/luci/bert/topic-data/train.txt
@@ -173,10 +173,19 @@ python3 main.py
 Now, we need to make sure that we have loaded all the needed packages. Since we
 are using `torch` we need to load `Anaconda` and activate virtual environment:
 
-```
+```bash
 module load Anaconda3/2021.05
 conda init bash
 bash
 conda create -n bert pytorch cudatoolkit=11.3 -c pytorch
 conda activate bert
 ```
+
+Finally, we can submit the job as follows:
+
+```bash
+sbatch gpu.job
+```
+
+To view the result you can use `cat log/[name of the log file]`.
+
